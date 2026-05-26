@@ -1,0 +1,178 @@
+import Anthropic from '@anthropic-ai/sdk';
+import { getRedis } from '../lib/redis.js';
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+const PLAYLIST_ID = 'PLrVpigQI9d3JM3hkQxLhTA0MWezwGWxnJ';
+
+// Category taxonomy — used for filtering in the app
+const CATEGORIES = [
+  'strength_back',        // lat width, rows, pulldowns, back thickness
+  'strength_chest',       // chest, pecs, bench press
+  'strength_shoulders',   // deltoids, overhead press, rotator cuff strength
+  'strength_arms',        // biceps, triceps, forearms
+  'strength_legs',        // quads, hamstrings, glutes, calves, squat pattern
+  'strength_core',        // abs, obliques, core stability
+  'hip_mobility',         // hip flexors, hip mobility, hip opening, glute activation
+  'shoulder_mobility',    // shoulder mobility, thoracic rotation, overhead range
+  'spine_mobility',       // spine, thoracic, lower back mobility
+  'full_body_flexibility',// stretching, full body flexibility, yoga-style
+  'cardio_conditioning',  // cardio, endurance, HIIT, conditioning
+  'posture',              // posture correction, alignment
+  'general_fitness',      // doesn't clearly fit another category
+];
+
+// Fetch all pages of playlist items from YouTube Data API
+async function fetchPlaylistVideos(apiKey) {
+  const videos = [];
+  let pageToken = '';
+
+  do {
+    const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems');
+    url.searchParams.set('part', 'snippet');
+    url.searchParams.set('maxResults', '50');
+    url.searchParams.set('playlistId', PLAYLIST_ID);
+    url.searchParams.set('key', apiKey);
+    if (pageToken) url.searchParams.set('pageToken', pageToken);
+
+    const res = await fetch(url.toString());
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(`YouTube API error ${res.status}: ${err?.error?.message ?? res.statusText}`);
+    }
+    const data = await res.json();
+
+    for (const item of data.items ?? []) {
+      const s = item.snippet;
+      if (s?.resourceId?.videoId) {
+        videos.push({
+          video_id: s.resourceId.videoId,
+          title: s.title ?? '',
+          description: (s.description ?? '').slice(0, 300), // cap for prompt efficiency
+          channel: s.videoOwnerChannelTitle ?? '',
+          thumbnail: s.thumbnails?.medium?.url ?? s.thumbnails?.default?.url ?? '',
+          url: `https://www.youtube.com/watch?v=${s.resourceId.videoId}`,
+        });
+      }
+    }
+
+    pageToken = data.nextPageToken ?? '';
+  } while (pageToken);
+
+  return videos;
+}
+
+// Batch-tag all videos in one Claude call (Haiku — fast and cheap for classification)
+async function tagVideos(videos) {
+  const list = videos.map((v, i) =>
+    `[${i}] Channel: ${v.channel} | Title: ${v.title} | Description: ${v.description.slice(0, 150)}`
+  ).join('\n');
+
+  const message = await anthropic.messages.create({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 4000,
+    messages: [{
+      role: 'user',
+      content: `You are tagging fitness videos for a personal training app used by a 51-year-old hybrid athlete (lifts + hikes + cycles). His main goals are: gaining muscle mass, hiking endurance, hip and shoulder mobility, and back development.
+
+Tag each video with the SINGLE most relevant category from this list:
+${CATEGORIES.join(', ')}
+
+Also identify the source type:
+- "athleanx" if channel is AthleanX or Jeff Cavaliere
+- "moves_method" if channel is Moves Method or similar mobility-focused
+- "other" for anything else
+
+Return ONLY a JSON array — no explanation, no markdown. One object per video, in the same order as the input list.
+Format: [{"index": 0, "category": "strength_back", "source": "athleanx", "tags": ["back", "lats", "width"]}, ...]
+The "tags" field should have 2-4 specific muscle groups or movement patterns.
+
+Videos to classify:
+${list}`,
+    }],
+  });
+
+  try {
+    const text = message.content[0].text.trim();
+    const json = text.startsWith('[') ? text : text.slice(text.indexOf('['));
+    return JSON.parse(json);
+  } catch {
+    // Fallback: tag everything as general_fitness if parsing fails
+    return videos.map((_, i) => ({ index: i, category: 'general_fitness', source: 'other', tags: [] }));
+  }
+}
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const redis = await getRedis();
+
+  // GET — return video index, optionally filtered by category
+  if (req.method === 'GET') {
+    const { category } = req.query ?? {};
+    const raw = await redis.get('trainai:videos:index');
+
+    if (!raw) {
+      return res.status(200).json({
+        videos: [],
+        categories: CATEGORIES,
+        message: 'No videos indexed yet. POST with {"action":"sync"} to build the index.',
+      });
+    }
+
+    let videos = JSON.parse(raw);
+    if (category && category !== 'all') {
+      videos = videos.filter(v => v.category === category);
+    }
+
+    return res.status(200).json({
+      videos,
+      total: JSON.parse(raw).length,
+      filtered: videos.length,
+      categories: CATEGORIES,
+      last_synced: await redis.get('trainai:videos:last_synced'),
+    });
+  }
+
+  // POST {action: "sync"} — fetch playlist + tag + store
+  if (req.method === 'POST') {
+    const { action } = req.body ?? {};
+    if (action !== 'sync') return res.status(400).json({ error: 'action must be "sync"' });
+
+    const apiKey = process.env.YOUTUBE_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: 'YOUTUBE_API_KEY not set in Vercel env vars' });
+
+    // Fetch all playlist videos
+    const rawVideos = await fetchPlaylistVideos(apiKey);
+    if (!rawVideos.length) return res.status(200).json({ ok: true, count: 0, message: 'Playlist appears empty or inaccessible' });
+
+    // Batch-tag with Claude Haiku
+    const tags = await tagVideos(rawVideos);
+
+    // Merge tags back into video objects
+    const tagged = rawVideos.map((v, i) => {
+      const t = tags.find(t => t.index === i) ?? { category: 'general_fitness', source: 'other', tags: [] };
+      return { ...v, category: t.category, source: t.source, tags: t.tags };
+    });
+
+    // Store in Redis — long TTL (7 days), sync manually when playlist changes
+    await redis.set('trainai:videos:index', JSON.stringify(tagged), { EX: 86400 * 7 });
+    await redis.set('trainai:videos:last_synced', new Date().toISOString(), { EX: 86400 * 7 });
+
+    // Return a category breakdown so you can see what got tagged
+    const breakdown = {};
+    tagged.forEach(v => { breakdown[v.category] = (breakdown[v.category] ?? 0) + 1; });
+
+    return res.status(200).json({
+      ok: true,
+      count: tagged.length,
+      breakdown,
+      sample: tagged.slice(0, 5),
+    });
+  }
+
+  res.status(405).json({ error: 'Method not allowed' });
+}
