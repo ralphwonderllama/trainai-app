@@ -1,56 +1,36 @@
-// Serverless function to handle workout check-in from iOS Shortcut
-// Endpoint: POST /api/workout
-// Expected body: {"event": "vasa_checkin"}
-
-const checkInData = {};
+import { getRedis } from '../lib/redis.js';
 
 export default async function handler(req, res) {
-  // Handle CORS
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
+  const redis = await getRedis();
+  const today = new Date().toISOString().split('T')[0];
 
   if (req.method === 'POST') {
-    const { event } = req.body;
+    const { event } = req.body ?? {};
+    if (event !== 'vasa_checkin') return res.status(400).json({ success: false, message: 'Invalid event type' });
 
-    if (event === 'vasa_checkin') {
-      const today = new Date().toISOString().split('T')[0];
+    const data = {
+      event: 'vasa_checkin',
+      gym: 'VASA FITNESS',
+      timestamp: new Date().toISOString(),
+      detected: true,
+    };
 
-      checkInData[today] = {
-        event: 'vasa_checkin',
-        gym: 'VASA FITNESS',
-        timestamp: new Date().toISOString(),
-        detected: true
-      };
+    // Persist in Redis — expires at midnight tonight
+    const secondsUntilMidnight = 86400 - (Math.floor(Date.now() / 1000) % 86400);
+    await redis.set(`trainai:workout:${today}`, JSON.stringify(data), { EX: secondsUntilMidnight + 3600 });
 
-      return res.status(200).json({
-        success: true,
-        message: 'Check-in detected',
-        data: checkInData[today]
-      });
-    }
-
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid event type'
-    });
+    return res.status(200).json({ success: true, message: 'Check-in detected', data });
   }
 
   if (req.method === 'GET') {
-    const today = new Date().toISOString().split('T')[0];
-    const todayData = checkInData[today] || null;
-
-    return res.status(200).json({
-      success: true,
-      data: todayData,
-      detected: !!todayData
-    });
+    const raw = await redis.get(`trainai:workout:${today}`);
+    const data = raw ? JSON.parse(raw) : null;
+    return res.status(200).json({ success: true, data, detected: !!data });
   }
 
   res.status(405).json({ message: 'Method not allowed' });

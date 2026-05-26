@@ -1,0 +1,9 @@
+{
+  "name": "trainai-app",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "redis": "^4.7.0",
+    "@anthropic-ai/sdk": "^0.39.0"
+  }
+}

@@ -1,0 +1,485 @@
+{
+  "schema_version": "1.0.0",
+  "purpose": "Dynamic calorie and macro recommendation rules for a personal AI nutrition/activity app.",
+  "user_profile": {
+    "sex": "male",
+    "age": 51,
+    "current_weight_lb": 147,
+    "initial_goal_weight_lb": 160,
+    "long_term_goal_weight_lb": 175,
+    "primary_goal": "gain_lean_mass_while_training_endurance",
+    "training_identity": "hybrid_athlete_active_lifter",
+    "dietary_constraints": [
+      "gluten_free",
+      "low_lactose",
+      "mostly_dairy_free"
+    ],
+    "notes": [
+      "Some cheese tolerated.",
+      "User tends to under-eat when not tracking.",
+      "User eats more when visible calorie targets are present."
+    ]
+  },
+  "data_sources": {
+    "nutrition": {
+      "primary": "MacrosFirst",
+      "notes": [
+        "Logging is inconsistent.",
+        "Tracked days likely represent best-case intake behavior.",
+        "Incomplete days should be detected and excluded from baseline intake averages when appropriate."
+      ]
+    },
+    "activity": {
+      "sources": [
+        "Strava",
+        "AllTrails",
+        "Apple Health walking/running",
+        "gym_visit_history"
+      ],
+      "priority_order": [
+        "workout_objects",
+        "gym_visit_history",
+        "daily_walking_miles_when_no_workouts"
+      ]
+    }
+  },
+  "activity_data_rules": {
+    "workout_objects_authoritative": true,
+    "workout_object_fields_to_prioritize": [
+      "type",
+      "duration",
+      "distance",
+      "elevation_gain",
+      "source"
+    ],
+    "apple_health_walking_rule": {
+      "use_daily_walking_miles_only_when_workouts_empty": true,
+      "on_workout_days_treat_walking_as_redundant": true,
+      "do_not_double_count_walking_distance_on_workout_days": true
+    },
+    "cycling_and_hiking_rule": {
+      "prefer_strava_alltrails_over_apple_health": true,
+      "reason": "Strava and AllTrails include elevation, duration, and workout context."
+    },
+    "gym_visit_rule": {
+      "default_assumption": "weightlifting",
+      "calorie_burn": "moderate",
+      "recovery_demand": "meaningful",
+      "notes": [
+        "User reports gym visits are mostly weightlifting, not cardio."
+      ]
+    },
+    "deduplication_rules": [
+      "If multiple workout objects on same date have same type, similar distance, similar duration, and similar elevation, treat as duplicate.",
+      "If Strava and AllTrails both describe the same outdoor activity, preserve the richer/elevation-aware record.",
+      "Do not add Apple walking miles to recorded cycling/hiking/trail-running distance."
+    ]
+  },
+  "behavioral_model": {
+    "tracked_days": {
+      "description": "User eats more intentionally when tracking and using visible calorie targets.",
+      "likely_intake_range_kcal": [
+        2700,
+        3000
+      ],
+      "interpretation": "Tracked days likely overestimate normal baseline intake."
+    },
+    "untracked_days": {
+      "description": "User tends to under-eat when not tracking.",
+      "likely_intake_range_kcal": [
+        2300,
+        2700
+      ],
+      "risk": "chronic_underfueling",
+      "notes": [
+        "May skip meals unintentionally.",
+        "May rely on protein shake for lunch.",
+        "Busy/travel days are high risk."
+      ]
+    },
+    "primary_problem": "inconsistent_caloric_surplus",
+    "not_primary_problem": [
+      "protein_intake",
+      "food_quality",
+      "abnormal_metabolism"
+    ]
+  },
+  "estimated_complete_logged_day_averages": {
+    "calories_kcal": [
+      2700,
+      2950
+    ],
+    "protein_g": [
+      135,
+      145
+    ],
+    "carbs_g": [
+      330,
+      360
+    ],
+    "fat_g": [
+      100,
+      110
+    ],
+    "caveat": "These likely represent better-than-average behavior because tracking causes the user to eat more."
+  },
+  "baseline_rules": {
+    "absolute_minimum_calories_kcal": 2800,
+    "minimum_rule": "Do not allow the user to unintentionally finish below 2800 kcal unless the user marks the day as intentional restriction, illness, or unusual circumstance.",
+    "training_day_minimum_kcal": 3000,
+    "moderate_endurance_day_minimum_kcal": 3500,
+    "heavy_endurance_day_minimum_kcal": 3900
+  },
+  "daily_target_categories": {
+    "rest_low_activity_day": {
+      "description": "No workout objects, low-to-moderate walking only.",
+      "calories_kcal": [
+        2850,
+        3000
+      ],
+      "protein_g": [
+        140,
+        160
+      ],
+      "carbs_g": [
+        375,
+        425
+      ],
+      "fat_g": [
+        90,
+        110
+      ]
+    },
+    "lift_day": {
+      "description": "Gym visit or strength training without major endurance workout.",
+      "calories_kcal": [
+        3100,
+        3300
+      ],
+      "protein_g": [
+        140,
+        160
+      ],
+      "carbs_g": [
+        400,
+        475
+      ],
+      "fat_g": [
+        90,
+        115
+      ]
+    },
+    "lift_plus_high_walking_day": {
+      "description": "Gym visit plus high non-workout walking on a day without outdoor workout duplication.",
+      "calories_kcal": [
+        3250,
+        3500
+      ],
+      "protein_g": [
+        140,
+        160
+      ],
+      "carbs_g": [
+        425,
+        500
+      ],
+      "fat_g": [
+        95,
+        120
+      ]
+    },
+    "moderate_endurance_day": {
+      "description": "Moderate bike ride, hike, trail run, or meaningful elevation/duration session.",
+      "calories_kcal": [
+        3500,
+        3800
+      ],
+      "protein_g": [
+        140,
+        165
+      ],
+      "carbs_g": [
+        475,
+        550
+      ],
+      "fat_g": [
+        95,
+        125
+      ]
+    },
+    "heavy_endurance_or_long_elevation_day": {
+      "description": "Long ride, long hike, major elevation gain, multi-hour endurance session, ski instructor/high-output day.",
+      "calories_kcal": [
+        3900,
+        4300
+      ],
+      "protein_g": [
+        140,
+        165
+      ],
+      "carbs_g": [
+        525,
+        650
+      ],
+      "fat_g": [
+        100,
+        130
+      ],
+      "allow_above_range": true
+    }
+  },
+  "activity_classification": {
+    "walking_only": {
+      "use_when": "workouts array empty",
+      "low_walking_miles": [
+        0,
+        3
+      ],
+      "moderate_walking_miles": [
+        3,
+        6
+      ],
+      "high_walking_miles": [
+        6,
+        999
+      ]
+    },
+    "moderate_endurance_heuristics": {
+      "duration_minutes": [
+        45,
+        120
+      ],
+      "elevation_gain_ft": [
+        500,
+        2000
+      ],
+      "cycling_distance_miles": [
+        12,
+        30
+      ],
+      "hiking_distance_miles": [
+        3,
+        9
+      ]
+    },
+    "heavy_endurance_heuristics": {
+      "duration_minutes": [
+        120,
+        999
+      ],
+      "elevation_gain_ft": [
+        2000,
+        99999
+      ],
+      "cycling_distance_miles": [
+        30,
+        999
+      ],
+      "hiking_distance_miles": [
+        8,
+        999
+      ]
+    },
+    "multi_workout_day_rule": {
+      "if_lift_plus_endurance": "Use endurance category, then bias toward upper end of calorie range.",
+      "if_multiple_endurance_sessions": "Use heavy_endurance_or_long_elevation_day."
+    }
+  },
+  "macro_logic": {
+    "protein": {
+      "target_g": [
+        140,
+        160
+      ],
+      "heavy_day_max_g": 165,
+      "logic": "Keep protein relatively stable across activity levels.",
+      "note": "Protein is generally adequate and is not the main limiting factor."
+    },
+    "carbs": {
+      "primary_scaling_variable": true,
+      "logic": "Increase carbs with endurance duration, elevation, consecutive training days, and recovery debt.",
+      "rest_low_activity_g": [
+        375,
+        425
+      ],
+      "lift_day_g": [
+        400,
+        475
+      ],
+      "moderate_endurance_g": [
+        475,
+        550
+      ],
+      "heavy_endurance_g": [
+        525,
+        650
+      ]
+    },
+    "fat": {
+      "target_g": [
+        90,
+        130
+      ],
+      "logic": "Use fat to support calorie density, especially with gluten-free eating constraints."
+    }
+  },
+  "underfueling_detection": {
+    "flags": [
+      {
+        "condition": "calories_logged < 2800 and not intentional_restriction",
+        "severity": "high",
+        "message": "Likely under-fueled relative to weight-gain goal."
+      },
+      {
+        "condition": "workout_day and calories_logged < 3000",
+        "severity": "high",
+        "message": "Training day ended below minimum fueling threshold."
+      },
+      {
+        "condition": "moderate_endurance_day and calories_logged < 3500",
+        "severity": "high",
+        "message": "Endurance day likely under-fueled."
+      },
+      {
+        "condition": "heavy_endurance_day and calories_logged < 3900",
+        "severity": "very_high",
+        "message": "Heavy endurance/elevation day likely created a deficit."
+      },
+      {
+        "condition": "target_gap_kcal >= 300",
+        "severity": "mild_to_moderate",
+        "message": "Below target; add calories to preserve surplus."
+      },
+      {
+        "condition": "target_gap_kcal >= 700",
+        "severity": "high",
+        "message": "Meaningful under-fueling risk."
+      },
+      {
+        "condition": "protein_on_track and carbs_below_target_after_endurance",
+        "severity": "moderate",
+        "message": "Protein is fine; carbs are the main recovery gap."
+      },
+      {
+        "condition": "no_food_logged_by_mid_afternoon and activity_load_high",
+        "severity": "early_warning",
+        "message": "High-risk under-eating day developing."
+      }
+    ]
+  },
+  "recovery_debt_logic": {
+    "track_cumulative_deficit": true,
+    "window_days": 3,
+    "deficit_bands_kcal": {
+      "mild": [
+        300,
+        500
+      ],
+      "meaningful": [
+        500,
+        900
+      ],
+      "high": [
+        900,
+        99999
+      ]
+    },
+    "if_three_day_deficit_exceeds_kcal": 1000,
+    "recommendation": "Increase calories, especially carbohydrates, over the next 24-48 hours.",
+    "avoid": [
+      "binge_framing",
+      "shame",
+      "restriction_language"
+    ]
+  },
+  "meal_completeness_rules": {
+    "likely_incomplete_if_calories_below_kcal": 1500,
+    "review_needed_if_calories_between_kcal": [
+      1500,
+      2200
+    ],
+    "likely_usable_if_calories_above_kcal": 2200,
+    "exclude_or_mark_incomplete_when": [
+      "only_one_meal_logged",
+      "breakfast_and_lunch_logged_but_dinner_missing",
+      "calories_implausibly_low_without_intentional_fast_or_illness",
+      "obvious_partial_logging"
+    ],
+    "include_when": [
+      "multiple_meals_logged",
+      "lunch_intentionally_skipped_but_shake_or_snack_logged",
+      "day_appears_to_represent_real_intake"
+    ]
+  },
+  "coaching_tone": {
+    "preferred_language": [
+      "fueling",
+      "recovery",
+      "matching output",
+      "protecting weight gain progress",
+      "carb replenishment",
+      "minimum floor"
+    ],
+    "avoid_language": [
+      "bad day",
+      "cheat day",
+      "diet failure",
+      "overeating",
+      "restriction",
+      "weight-loss framing"
+    ],
+    "example_messages": [
+      "You are likely under-fueled for today\u2019s activity.",
+      "Today\u2019s ride increased your calorie and carb needs.",
+      "You are on track for protein, but carbs are behind for recovery.",
+      "Add 600\u2013800 calories tonight to protect weight gain progress.",
+      "This is not overeating; it is matching your output."
+    ]
+  },
+  "product_principles": [
+    "Optimize for raising the user's lowest intake days.",
+    "Do not rely on static calorie targets.",
+    "Scale calories dynamically with activity load.",
+    "Prioritize carbs as activity increases.",
+    "Keep protein stable.",
+    "Prevent Apple Health activity double counting on workout days.",
+    "Detect under-fueling early in the day.",
+    "Treat untracked days as high risk for under-eating.",
+    "Use visible targets because they improve user behavior."
+  ],
+  "recommended_app_layers": {
+    "layer_1_raw_inputs": [
+      "nutrition_logs",
+      "workout_objects",
+      "daily_walking_miles",
+      "weight_measurements",
+      "gym_visits",
+      "sleep_recovery_optional"
+    ],
+    "layer_2_activity_normalization": [
+      "deduplicate_overlapping_activity",
+      "prioritize_workout_objects",
+      "ignore_apple_walking_on_workout_days",
+      "estimate_activity_load_score",
+      "identify_lift_days"
+    ],
+    "layer_3_energy_targeting": [
+      "assign_day_category",
+      "set_calorie_target",
+      "set_macro_targets",
+      "adjust_for_recovery_debt"
+    ],
+    "layer_4_intake_monitoring": [
+      "track_progress_through_day",
+      "flag_missed_meals",
+      "detect_low_intake_by_time",
+      "compare_logged_intake_to_target"
+    ],
+    "layer_5_coaching": [
+      "recommend_specific_calorie_additions",
+      "explain_target_changes",
+      "provide_recovery_focused_guidance",
+      "encourage_consistency_without_perfection"
+    ]
+  }
+}
