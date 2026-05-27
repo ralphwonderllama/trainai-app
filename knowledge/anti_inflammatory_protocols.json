@@ -1,0 +1,348 @@
+{
+  "meta": {
+    "version": "1.0",
+    "last_updated": "2026-05-26",
+    "sources": [
+      "Bryan Johnson Blueprint Protocol (protocol.bryanjohnson.com)",
+      "Dr. Mark Hyman — The Pegan Diet, The Doctor's Farmacy, Ultra-Inflammation framework",
+      "Dr. Will Bulsiewicz — Fiber Fueled (2020)",
+      "Dr. Emeran Mayer — The Mind-Gut Connection (2016)",
+      "Giulia Enders — Gut: The Inside Story (2014)",
+      "Dr. Mark Stengler — The Holistic Guide to Gut Health",
+      "Peer-reviewed literature on oleocanthal, polyphenols, gut-thyroid axis, SCFAs"
+    ],
+    "note": "These protocols are filtered for real-world applicability — office environment, international travel, family with kids, no private chef. Ranked by evidence strength AND practical achievability for Randy's lifestyle."
+  },
+
+  "core_principle": "Inflammation is the common thread between Hashimoto's autoimmunity, accelerated aging, mood dysregulation, metabolic dysfunction, and poor recovery. Every intervention below addresses inflammation through a specific, evidence-based mechanism. Prioritize interventions with the highest impact-to-effort ratio given Randy's real-world constraints.",
+
+  "leaky_gut_hashimotos_connection": {
+    "summary": "The gut-thyroid axis is one of the most evidence-supported mechanisms in autoimmune thyroid disease. Understanding it makes Randy's current interventions make more sense and identifies the next highest-leverage additions.",
+    "mechanism": [
+      "1. Gluten (and other gut irritants) trigger release of ZONULIN — a protein that opens tight junctions between intestinal cells",
+      "2. Open tight junctions = 'leaky gut' = bacterial antigens, undigested food particles, and LPS (lipopolysaccharide) enter the bloodstream",
+      "3. Immune system activates against these foreign particles",
+      "4. MOLECULAR MIMICRY: thyroid tissue shares structural similarities with certain food proteins. Immune response targeting foreign antigens can cross-react with thyroid tissue → TPOAb elevation",
+      "5. Dysbiosis (poor gut microbiome diversity) amplifies this cascade — fewer beneficial bacteria = less SCFA production = weaker gut barrier integrity",
+      "6. Result: chronic autoimmune signaling even when gluten is removed, until gut barrier fully heals and microbiome diversity is restored"
+    ],
+    "randy_relevance": "Randy's gluten-free diet directly addresses step 1 (zonulin trigger). The gut microbiome restoration work (fermented foods, fiber diversity, prebiotics) addresses steps 4-6. This is why gut health recommendations are not tangential — they are core to TPOAb reduction.",
+    "healing_timeline": "Gut barrier restoration typically requires 3-12 months of consistent intervention. TPOAb may continue to be elevated while the gut heals even if the gluten trigger is removed. This context helps explain why the first lab retest may not show dramatic TPOAb change yet."
+  },
+
+  "interventions": {
+
+    "evoo_oleocanthal": {
+      "priority": 1,
+      "category": "anti-inflammatory_nutrition",
+      "title": "High-Polyphenol Extra Virgin Olive Oil (Oleocanthal)",
+      "evidence": "strong",
+      "mechanism": [
+        "Oleocanthal inhibits COX-1 and COX-2 enzymes — the same pathways as ibuprofen — suppressing prostaglandin synthesis and systemic inflammation",
+        "NF-κB pathway suppression: reduces expression of pro-inflammatory cytokines (IL-6, TNF-α, CRP)",
+        "TRPA1 receptor activation in the pharynx produces the characteristic 'throat catch' — a reliable quality proxy",
+        "Additional polyphenols (hydroxytyrosol, oleuropein) provide antioxidant and gut-barrier protective effects",
+        "Polyphenols act as prebiotics — feeding beneficial gut bacteria and increasing SCFA production"
+      ],
+      "quality_metric": {
+        "target_biophenols_mg_per_kg": ">400 (exceptional oils reach 600-800+)",
+        "cough_test": "Swallow 1 tsp straight. A distinct catch/sting at the back of the throat (not the mouth) indicates meaningful oleocanthal. 'One-cough' = moderate; 'two-cough' = high quality.",
+        "harvest_date": "Look for harvest date on label (not just 'best by'). Use within 12-18 months of harvest.",
+        "storage": "Dark glass bottle, cool/dark location, away from heat and direct light. Polyphenols degrade significantly with heat and light exposure.",
+        "varieties_high_polyphenol": ["Koroneiki (Greek)", "Picual (Spanish)", "Coratina (Italian)"],
+        "brands_known_for_high_polyphenols": ["Myrolion (Greek, lab-verified)", "Kosterina (Greek-American)", "Mina (Moroccan Picholine)", "Zoe (Spanish Picual)", "Bragg Organic (acceptable entry-level)"],
+        "avoid": "Light/clear glass bottles, bottles without harvest date, 'light' olive oil, blends labeled only 'Product of multiple countries' without harvest info"
+      },
+      "dose": "1-2 tablespoons per meal. Bryan Johnson uses 1 tbsp per meal (3 meals = 3 tbsp/day). Even 1-2 tbsp/day delivers meaningful anti-inflammatory effect.",
+      "practical_for_randy": [
+        "At home: easy swap — buy high-polyphenol EVOO instead of standard",
+        "Traveling: most decent restaurants use olive oil — ask for EVOO and extra on the side",
+        "Office lunch: drizzle on salad, grain bowls, anything available",
+        "Family: completely compatible — kids can eat it too, it just replaces other oils"
+      ],
+      "hashimoto_relevance": "Reduces the systemic inflammatory burden that drives TPOAb elevation. Supports gut barrier integrity through prebiotic polyphenol effect."
+    },
+
+    "fiber_diversity": {
+      "priority": 2,
+      "category": "gut_microbiome",
+      "title": "Dietary Fiber Diversity (Bulsiewicz / Fiber Fueled framework)",
+      "evidence": "strong",
+      "mechanism": [
+        "Diverse fiber types feed different bacterial species → greater microbiome diversity",
+        "Fiber fermentation produces Short-Chain Fatty Acids (SCFAs): butyrate, propionate, acetate",
+        "Butyrate is the primary fuel for colonocytes (gut lining cells) — directly repairs and maintains gut barrier integrity",
+        "SCFA production reduces intestinal permeability ('leaky gut') — directly addresses the Hashimoto's cascade",
+        "Diverse microbiome = stronger immune regulation = reduced autoimmune signaling"
+      ],
+      "target": "30 different plant foods per week (Bulsiewicz's research-backed target). Each unique plant = unique fiber + polyphenol profile feeding different bacterial species.",
+      "randy_already_doing": [
+        "Chia seeds in shakes — soluble fiber, omega-3, prebiotic",
+        "Hemp hearts in shakes — protein + omega-3 + fiber",
+        "Flax seeds in shakes — lignan polyphenols, soluble fiber, anti-inflammatory omega-3 (ALA)"
+      ],
+      "easy_additions": [
+        "Berries daily (blueberry, raspberry, blackberry) — prebiotic fiber + polyphenols",
+        "Garlic and onion in cooking — inulin prebiotic fiber, feeds Bifidobacterium",
+        "Lentils or chickpeas 2-3x/week — also hits protein target for weight gain",
+        "Leafy greens (spinach, arugula, kale) — easy to add to any meal",
+        "Sauerkraut or kimchi (1-2 tbsp/day) — fermented + fiber + probiotics combined"
+      ],
+      "practical_for_randy": [
+        "Family meals: add lentils to soups/stews, nobody notices",
+        "Travel: berries available everywhere, order extra vegetables at restaurants",
+        "Office: nuts, seeds, and fruit are portable — doesn't require meal prep"
+      ],
+      "hashimoto_relevance": "SCFA production from diverse fiber is the single most evidence-supported mechanism for gut barrier repair — directly addressing the leaky gut → TPOAb cascade."
+    },
+
+    "fermented_foods": {
+      "priority": 3,
+      "category": "gut_microbiome",
+      "title": "Fermented Foods (Live Cultures)",
+      "evidence": "strong — Stanford 2021 RCT (Wastyk et al.) showed 10-week high-fermented-food diet increased microbiome diversity AND reduced inflammatory markers including IL-6",
+      "mechanism": [
+        "Live bacteria directly colonize the gut temporarily, supporting diversity",
+        "Fermentation pre-digests food compounds, improving bioavailability",
+        "Produces beneficial metabolites including SCFA precursors and B vitamins",
+        "Reduces pathogenic bacterial overgrowth through competitive exclusion"
+      ],
+      "sources": [
+        "Kimchi — also anti-inflammatory from garlic/ginger/capsaicin; gluten-free; travel-packaged versions exist",
+        "Sauerkraut — simplest, just fermented cabbage; gluten-free; long shelf life",
+        "Coconut yogurt (dairy-free) — probiotic cultures without lactose issue",
+        "Water kefir (dairy-free alternative to milk kefir)",
+        "Miso paste — note: contains soy; use in cooking for flavor + probiotics (heat kills bacteria, so add at end)"
+      ],
+      "dose": "1-2 servings per day. Consistency over quantity.",
+      "practical_for_randy": [
+        "1-2 tbsp sauerkraut or kimchi alongside any meal — takes 10 seconds",
+        "Travel: shelf-stable kimchi packets, coconut yogurt available at most airports/hotels",
+        "Family: easy to keep a jar of sauerkraut in fridge — kids often ignore it, doesn't affect family meals"
+      ],
+      "hashimoto_relevance": "Microbiome diversity is directly inversely correlated with autoimmune disease severity. The Stanford study specifically showed reduced IL-6, which drives thyroid autoimmunity."
+    },
+
+    "omega3_epa_dha": {
+      "priority": 4,
+      "category": "anti-inflammatory_supplementation",
+      "title": "Omega-3 Fatty Acids (EPA/DHA)",
+      "evidence": "strong",
+      "mechanism": [
+        "EPA and DHA are direct precursors to resolvins and protectins — pro-resolving mediators that actively switch OFF inflammation (not just reduce it)",
+        "Compete with omega-6 arachidonic acid for COX/LOX enzymes — shifting eicosanoid production toward anti-inflammatory forms",
+        "Reduce NF-κB activation and TNF-α, IL-1β, IL-6 production",
+        "Support gut barrier integrity and reduce intestinal permeability"
+      ],
+      "randy_status": "Already taking 1.5-2g EPA/DHA fish oil — this is a solid dose. Consistency (60-70%) is the gap.",
+      "dose": "1-2g EPA/DHA daily minimum. 2-4g in the context of active autoimmunity or high inflammation.",
+      "hashimoto_relevance": "Omega-3s directly reduce the Th17/Th1 immune imbalance characteristic of Hashimoto's autoimmunity."
+    },
+
+    "polyphenol_diversity": {
+      "priority": 5,
+      "category": "anti-inflammatory_nutrition",
+      "title": "Polyphenol Diversity (Hyman / Pegan Diet framework)",
+      "evidence": "strong — polyphenols are the most studied class of dietary anti-inflammatory compounds",
+      "mechanism": [
+        "Polyphenols modulate NF-κB, the 'master switch' of inflammation",
+        "Act as prebiotics — feeding Akkermansia muciniphila and Bifidobacterium species that support gut barrier",
+        "Activate Nrf2 pathway — upregulates endogenous antioxidant enzymes (glutathione, SOD, catalase)",
+        "Many polyphenols directly modulate immune function and reduce autoimmune signaling"
+      ],
+      "key_compounds_and_sources": {
+        "oleocanthal": "High-polyphenol EVOO (see above — priority 1)",
+        "anthocyanins": "Blueberries, blackberries, raspberries, purple cabbage — most anti-inflammatory berry polyphenols",
+        "curcumin": "Turmeric — requires black pepper (piperine) for 20x bioavailability. Easy to add to shakes or cooking.",
+        "quercetin": "Capers, red onion, apples — also a natural antihistamine and mast cell stabilizer",
+        "resveratrol": "Grapes, blueberries — modest dose in food form",
+        "EGCG": "Green tea — easy daily habit; also anti-inflammatory and modulates thyroid antibodies",
+        "sulforaphane": "Broccoli sprouts (highest source), broccoli, cauliflower — activates Nrf2 powerfully; glucosinolate note: cooking degrades enzyme, eat some raw or lightly steamed"
+      },
+      "practical_for_randy": [
+        "Turmeric + black pepper in protein shakes — 1/4 tsp turmeric, pinch of black pepper; no taste impact",
+        "Blueberries daily — frozen works as well as fresh for polyphenols",
+        "Green tea as a coffee alternative 1-2x/day",
+        "Add capers or red onion to whatever meals make sense",
+        "Lightly steamed or raw cruciferous vegetables 3-4x/week"
+      ],
+      "hashimoto_relevance": "Curcumin and EGCG have specific evidence for reducing thyroid autoantibodies in small RCTs. NF-κB suppression is the most direct anti-inflammatory mechanism available through food."
+    },
+
+    "gut_brain_axis_mood": {
+      "priority": 6,
+      "category": "mood_mental_health",
+      "title": "Gut-Brain Axis (Mayer / Mind-Gut Connection framework)",
+      "evidence": "strong and rapidly expanding",
+      "mechanism": [
+        "90% of the body's serotonin is produced in the gut by enterochromaffin cells, not the brain",
+        "The enteric nervous system (500M neurons) communicates bidirectionally with the brain via the vagus nerve",
+        "Gut microbiome produces neurotransmitter precursors: tryptophan (serotonin), GABA, dopamine precursors",
+        "Dysbiosis → elevated LPS → neuroinflammation → depression and anxiety",
+        "Psychobiotics: specific probiotic strains (Lactobacillus rhamnosus, L. helveticus + B. longum) have RCT evidence for reducing anxiety and cortisol"
+      ],
+      "randy_relevance": "The gut-brain connection is directly relevant to the Wellbutrin context. Improving gut microbiome diversity, reducing intestinal permeability, and supporting serotonin precursor availability (via tryptophan-rich foods) all support mood regulation through mechanisms complementary to bupropion. This is the biological basis for lifestyle → mood improvement. NEVER position as replacing medication — frame as supporting the same neurochemical targets through parallel pathways.",
+      "practical_additions": [
+        "Tryptophan-rich foods: turkey, eggs, pumpkin seeds, tofu — support serotonin synthesis",
+        "Probiotic strain: Lactobacillus rhamnosus GG (widely available, Culturelle brand) has the strongest mood evidence",
+        "Reducing sugar: sugar feeds pathogenic bacteria, disrupts Lactobacillus/Bifidobacterium balance, spikes neuroinflammation",
+        "Fermented foods (above) — also support the gut-brain axis via SCFA production"
+      ]
+    },
+
+    "hyman_5_root_causes_autoimmune": {
+      "priority": 7,
+      "category": "autoimmune_framework",
+      "title": "Hyman's 5 Root Causes of Autoimmune Disease",
+      "evidence": "functional medicine framework — well-supported mechanistically",
+      "causes_and_randy_status": {
+        "leaky_gut": {
+          "status": "Being addressed — gluten-free diet, omega-3s, fermented foods protocol",
+          "remaining_gap": "Fiber diversity and fermented food consistency could be improved"
+        },
+        "food_sensitivities": {
+          "status": "Gluten eliminated. Dairy mostly eliminated.",
+          "remaining_gap": "Other potential sensitivities (nightshades, eggs, soy) are unknown — elimination testing could be done if TPOAb doesn't respond. Not priority yet."
+        },
+        "chronic_infections": {
+          "status": "Unknown — no testing done",
+          "note": "EBV (Epstein-Barr Virus) reactivation is a known Hashimoto's trigger. H. pylori also implicated. Worth flagging for clinician if TPOAb doesn't respond to current interventions."
+        },
+        "environmental_toxins": {
+          "status": "Partially addressed — clean diet, no alcohol",
+          "practical_additions": "BPA-free containers (Randy likely already uses), filtered water, minimize processed food packaging. Sauna sweating for toxin elimination (if VASA has one) has some evidence."
+        },
+        "chronic_stress": {
+          "status": "Partially addressed via exercise and sleep",
+          "note": "Cortisol directly suppresses regulatory T cells and amplifies autoimmune activity. HRV as tracked by Oura is the best available proxy for autonomic stress load."
+        }
+      }
+    },
+
+    "anti_inflammatory_spices": {
+      "priority": 8,
+      "category": "anti-inflammatory_nutrition",
+      "title": "Anti-Inflammatory Spices (High Impact, Zero Effort)",
+      "evidence": "strong for curcumin; moderate for others",
+      "compounds": {
+        "turmeric_curcumin": {
+          "dose": "1/2-1 tsp turmeric + pinch of black pepper (piperine increases bioavailability 20x)",
+          "mechanism": "NF-κB inhibition, IL-6 and TNF-α reduction, direct antioxidant",
+          "how": "Add to protein shakes — completely undetectable in taste. Or cooking.",
+          "hashimoto_note": "Small RCTs show curcumin reduces thyroid autoantibody levels"
+        },
+        "ginger": {
+          "dose": "1-2g fresh or powdered",
+          "mechanism": "COX inhibition (like oleocanthal), NF-κB suppression, gut motility support",
+          "how": "Fresh ginger to shakes or tea; powdered in cooking"
+        },
+        "cinnamon": {
+          "dose": "1/2 tsp daily",
+          "mechanism": "Improves insulin sensitivity (blood glucose regulation — relevant to Randy's glucose flag), mild anti-inflammatory",
+          "how": "Add to shakes or oatmeal"
+        }
+      },
+      "practical_for_randy": "All of these can go into a protein shake. 30 seconds, no extra meal prep, family doesn't need to change anything."
+    },
+
+    "sleep_inflammation_connection": {
+      "priority": 9,
+      "category": "recovery",
+      "title": "Sleep Quality as Anti-Inflammatory Intervention",
+      "evidence": "very strong",
+      "mechanism": [
+        "During deep sleep: growth hormone released → tissue repair, muscle protein synthesis",
+        "Glymphatic system active: cerebrospinal fluid flushes brain — removes inflammatory metabolites including beta-amyloid",
+        "Below 7 hours: significant increase in CRP, IL-6, TNF-α within days",
+        "Poor sleep → elevated cortisol → cortisol drives NF-κB → amplifies autoimmune activity",
+        "Oura data makes this directly trackable: HRV as the best single proxy for systemic inflammation and recovery"
+      ],
+      "randy_context": "Eszopiclone supports sleep onset but may reduce deep and REM sleep quality at higher doses. The goal of reducing eszopiclone over time, combined with magnesium glycinate, consistent bedtime, LDN timing optimization, and reduced inflammation, is directly tied to improving sleep architecture — which then reduces systemic inflammation, supports TPOAb reduction, and supports mood.",
+      "practical_targets": {
+        "bedtime_consistency": "Same time ±30 min is more important than total hours",
+        "realistic_target": "10:00-10:30 PM (not 8:30 PM — this isn't realistic with family/kids)",
+        "no_food": "2-3 hours before bed minimum — large meals raise HR and disrupt HRV",
+        "wind_down": "30-45 min dimmed lights, no work email — family permitting",
+        "magnesium": "Glycinate form at bedtime — supports GABA and parasympathetic tone, promotes deep sleep"
+      }
+    },
+
+    "sauna_protocol": {
+      "priority": 10,
+      "category": "recovery_and_detox",
+      "title": "Dry Sauna (Bryan Johnson Protocol)",
+      "evidence": "strong — Finnish cohort studies, Bryan Johnson hsCRP results",
+      "mechanism": [
+        "Heat shock proteins: activated by sauna → cellular repair and protein quality control",
+        "Hormesis: controlled heat stress → adaptive anti-inflammatory response",
+        "Toxin elimination via sweat: 15 sessions showed 65% reduction in 2,4-D, 100% elimination of MEHP and perchlorate",
+        "Cardiovascular: Bryan saw 12.6% reduction in central blood pressure after 23 sessions",
+        "Bryan's hsCRP dropped to below detectable levels (combined with other interventions)"
+      ],
+      "protocol": "175°F (80°C), 15-20 minutes, 2-3x/week post-workout (not before, as it causes significant fatigue)",
+      "randy_practical": "If VASA has a sauna, this is a zero-incremental-cost intervention — just extend post-workout by 20 min, 2-3 days/week. High impact for Hashimoto's inflammation and cardiovascular health.",
+      "hashimoto_relevance": "hsCRP reduction is the most direct measurable anti-inflammatory outcome — relevant to both autoimmune activity and aging."
+    },
+
+    "evoo_practical_sourcing": {
+      "priority": 1,
+      "category": "practical_guidance",
+      "title": "How to Buy High-Polyphenol EVOO in the Real World",
+      "what_to_look_for": [
+        "Total biophenols listed on label: target >400 mg/kg (some will say '500+' or '750+')",
+        "Harvest date on label (month/year) — not just 'best by' date",
+        "Dark glass bottle (amber or green)",
+        "Single origin or single estate (better traceability and consistency)",
+        "'Early harvest' or 'Novembre' on label — picked when olives are green/immature, highest polyphenol content",
+        "Koroneiki, Picual, or Coratina variety listed — these are the highest polyphenol cultivars"
+      ],
+      "recommended_brands_usa": [
+        "Myrolion — Greek Koroneiki, lab-verified 500-750+ mg/kg, order online",
+        "Kosterina — Greek-American, widely available at Whole Foods and Amazon, ~400-600 mg/kg",
+        "Mina — Moroccan Picholine variety, available at Costco and Amazon, very good value",
+        "Zoe — Spanish Picual, available at Whole Foods",
+        "Olio Carli (Italian) — high quality, direct subscription available"
+      ],
+      "travel_use": "At restaurants: ask for EVOO specifically and request extra on the side for drizzling. Italian, Mediterranean, and Greek restaurants almost always have quality EVOO.",
+      "avoid": "Anything in clear/plastic bottles, 'pure olive oil' or 'light olive oil' (refined, low polyphenols), generic supermarket brands without harvest date"
+    }
+  },
+
+  "practical_priority_list_for_randy": {
+    "description": "Ranked by impact × feasibility for someone with Randy's specific profile (Hashimoto's, office job, family, international travel). These are not theoretical — these are the highest-leverage moves.",
+    "tier1_do_now": [
+      "Upgrade to high-polyphenol EVOO (Kosterina or Mina widely available) — one purchase, used daily",
+      "Add turmeric + black pepper to daily protein shakes — 30 seconds, zero lifestyle impact",
+      "Add 1-2 tbsp sauerkraut or kimchi alongside one meal per day — easy, affordable",
+      "Use VASA sauna 2-3x/week post-workout if available — zero extra cost"
+    ],
+    "tier2_build_habit": [
+      "Target 30 different plant foods per week — track casually, include spices and herbs as individual plants",
+      "Add green tea 1-2x/day (mornings work) — easy caffeine-moderate alternative",
+      "Increase supplement consistency to 85%+ — the checklist in TrainAI addresses this directly",
+      "Consistent 10-10:30 PM bedtime — one of the highest ROI sleep interventions"
+    ],
+    "tier3_when_ready": [
+      "Add specific probiotic strain (Lactobacillus rhamnosus GG / Culturelle) for gut-brain and microbiome support",
+      "Consider ginger supplement or daily fresh ginger addition to shakes",
+      "Explore CGM (continuous glucose monitor) 2-week trial — given uncertain fasting glucose result, this would show how Randy's diet affects blood sugar in real time"
+    ],
+    "not_for_randy": [
+      "Noon last meal — not compatible with family life and work",
+      "8:30 PM bedtime — not realistic with kids",
+      "Extensive medical procedures (HBOT, stem cells, gene therapy) — Bryan Johnson's extreme tier",
+      "Psychedelic therapy — not aligned with Randy's stated preferences",
+      "Private-chef-required meal prep — has to work in an office and while traveling"
+    ]
+  },
+
+  "coach_rules": [
+    "When recommending anti-inflammatory interventions, connect them to Randy's specific health context: Hashimoto's TPOAb reduction, gut barrier repair, mood support (parallel to Wellbutrin), or aging/longevity.",
+    "Prioritize high-impact, low-effort interventions that work in offices, restaurants, and with family meals.",
+    "Never make Randy feel like he needs a bio-dome to be healthy. 80% of the benefit comes from 20% of the interventions.",
+    "When EVOO is mentioned, be specific about polyphenol quality — not just 'use olive oil'.",
+    "The gut-Hashimoto's connection makes fiber diversity and fermented foods directly therapeutic, not just nutritional.",
+    "Connect sleep quality improvements to both anti-inflammatory outcomes AND mood support — these are not separate goals.",
+    "When supplement adherence is low in the log, note the specific mechanisms being missed (e.g., missed fish oil = missed COX pathway anti-inflammatory dose)."
+  ]
+}

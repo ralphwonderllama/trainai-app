@@ -5,6 +5,7 @@ import { getRedis } from '../lib/redis.js';
 const require = createRequire(import.meta.url);
 const eng = require('../knowledge/dynamic_calorie_engine.json');
 const ctx = require('../knowledge/user_health_context.json');
+const antiInflam = require('../knowledge/anti_inflammatory_protocols.json');
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -70,6 +71,41 @@ Randy lives in the real world. Adaptations from longevity protocols:
 - Morning light: 10–15 min outdoor walk within 30 min of waking
 - Sauna: 2–3x/week post-VASA if available (not daily)
 - Anti-inflammatory foods: incorporated into existing meals, not a lifestyle overhaul
+
+## Anti-Inflammatory Protocol — Evidence-Based Priorities
+
+### Gut–Hashimoto's Connection (Core Mechanism)
+Randy's gluten-free diet directly addresses the primary trigger: gluten → zonulin release → tight junction opening → leaky gut → molecular mimicry → TPOAb elevation. The gut-healing work amplifies this: fiber diversity and fermented foods → SCFA production (especially butyrate) → gut barrier repair → reduced autoimmune signaling. **Gut health recommendations are not tangential — they are core to TPOAb reduction.** Healing timeline is 3–12 months of consistent intervention; the first lab retest may not show dramatic TPOAb reduction even if the protocol is working — set this expectation.
+
+### EVOO / Oleocanthal — Be Specific (Priority 1)
+When recommending olive oil, be specific: oleocanthal is the active compound — it inhibits COX-1 and COX-2 via the same pathway as ibuprofen, plus suppresses NF-κB and pro-inflammatory cytokines (IL-6, TNF-α). Target oils with **>400 mg/kg total biophenols** (look for this on the label, or Koroneiki/Picual/Coratina variety + harvest date). Quality proxy: swallow 1 tsp straight — a distinct catch at the back of the throat = meaningful oleocanthal; "two-cough" = excellent. Recommended US brands: **Kosterina** (Whole Foods/Amazon), **Mina** (Costco/Amazon — great value), **Myrolion** (online, lab-verified 500–750+ mg/kg), **Zoe** (Whole Foods). Dose: 1–2 tbsp/day minimum; 2–3 tbsp is the Bryan Johnson protocol. Randy already uses olive oil — the upgrade is the polyphenol level. Avoid generic supermarket brands in clear/plastic bottles.
+
+### Practical Priority Tiers
+**Tier 1 — Do Now (high impact, no lifestyle overhaul):**
+- Upgrade to high-polyphenol EVOO (Kosterina or Mina — one purchase, used daily, family-compatible)
+- Add ¼–½ tsp turmeric + pinch of black pepper to daily protein shakes — piperine increases curcumin bioavailability 20x; tasteless in shakes; small RCTs show curcumin reduces thyroid autoantibodies; also NF-κB suppressor
+- Add 1–2 tbsp sauerkraut or kimchi alongside one meal per day — Stanford 2021 RCT showed high-fermented-food diet increased microbiome diversity AND reduced IL-6 in 10 weeks; takes 10 seconds
+- VASA sauna 2–3x/week post-workout if available — 175°F, 15–20 min; Bryan Johnson's hsCRP dropped to below detectable levels with consistent sauna + other interventions; zero extra cost if the sauna is already there
+
+**Tier 2 — Build the Habit:**
+- Target 30 different plant foods per week (Bulsiewicz / Fiber Fueled framework) — diverse fiber types feed different bacterial species → greater SCFA production → butyrate fuels gut lining cells and repairs the barrier. Randy's chia/hemp/flax/berries already count. Each spice counts as one plant. Track casually.
+- Green tea 1–2x/day — EGCG has specific small-RCT evidence for reducing thyroid autoantibodies; also NF-κB suppressor; easy caffeine-moderate morning habit
+- Supplement adherence to 85%+ — when fish oil is missed, the COX-pathway anti-inflammatory dose is missed; when magnesium is missed, sleep architecture is impacted that night
+
+**Not for Randy:** noon last meal, 8:30 PM bedtime, private-chef meal prep, extreme medical procedures, psychedelic therapy.
+
+### Gut–Brain Axis → Mood (Parallel to Wellbutrin Pathway)
+90% of the body's serotonin is produced in the gut by enterochromaffin cells, not the brain. Dysbiosis → elevated LPS → neuroinflammation → depression. The gut-microbiome interventions above (fermented foods, fiber diversity, omega-3s) support serotonin precursor availability and reduce neuroinflammation — complementary to bupropion's mechanism. **Frame as: lifestyle and Wellbutrin are working on parallel pathways — never suggest one replacing the other.**
+
+### Sleep Is an Anti-Inflammatory Intervention
+Under 7 hours → measurable increases in CRP, IL-6, and TNF-α within days. Poor sleep → elevated cortisol → NF-κB activation → amplified autoimmune signaling (directly relevant to TPOAb). Improving sleep architecture (consistent 10–10:30 PM bedtime, magnesium glycinate at night, LDN timing optimization, eszopiclone reduction as natural sleep improves) is a direct anti-inflammatory intervention. Connect Oura deep sleep and HRV data to inflammation outcomes, not just "how rested you feel."
+
+### Anti-Inflammatory Spice Stack (Zero-Effort Addition to Shakes)
+All of these can go into a daily protein shake undetected:
+- Turmeric + black pepper (curcumin — NF-κB inhibitor, thyroid autoantibody reduction)
+- Ginger (COX inhibition, gut motility support)
+- Cinnamon (improves insulin sensitivity — directly relevant to Randy's glucose flag; ½ tsp/day)
+Adding all three takes under 30 seconds and requires no lifestyle change.
 
 ## Assumed Daily Habits (Present by Default — Do Not Flag as Missing)
 - LMNT electrolytes on every workout day (not logged individually)
