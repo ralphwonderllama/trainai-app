@@ -36,6 +36,34 @@
 
     {
       "priority": 2,
+      "slug": "training_uphill_athlete",
+      "title": "Training for the Uphill Athlete",
+      "author": "Steve House, Scott Johnston, Kilian Jornet",
+      "status": "queued",
+      "randy_relevance": "CRITICAL for 50-mile trek goal — this is the definitive methodology book for multi-sport mountain athletes who mix trail running, hiking, ski mountaineering, and climbing in a single training year. Steve House is one of the world's best mountaineers, Scott Johnston was an Olympic-level cross-country ski coach, and Kilian Jornet is arguably the best endurance mountain athlete alive. The training principles are scientifically backed and athlete-tested. Directly applicable to structuring Randy's annual training plan around the 50-mile trek.",
+      "key_topics_to_extract": [
+        "Block periodization for mountain endurance athletes — how to structure training phases leading to a major objective (directly applicable to 50-mile trek).",
+        "Zone 2 and aerobic base building methodology — how much, when, and how to know it's working. Complements Attia's Zone 2 framework with mountain-sport application.",
+        "Strength-to-weight ratio for uphill performance — how to build functional strength that aids rather than hinders endurance.",
+        "Specific strength exercises for mountain athletes — not gym bodybuilding, but movement-specific strength (single-leg work, hip stability, core for steep terrain).",
+        "Training week structure — how to balance gym days, Zone 2 sessions, and higher-intensity work.",
+        "Physical tests for mountain athletes — fitness benchmarks, aerobic threshold self-tests.",
+        "Recovery principles — how to build volume without overtraining, especially relevant given Randy's high weekly output.",
+        "Tapering protocol — how to peak for a major multi-day objective like a 50-mile trek.",
+        "Multi-day effort preparation — how the body responds to consecutive days of high-output mountain activity, nutrition and recovery strategies.",
+        "Altitude considerations if relevant to the trek location."
+      ],
+      "randy_caveats": [
+        "Randy's 50-mile trek is the primary training objective — extract everything through that lens.",
+        "Randy is also a gym/weights athlete — the book's strength section may undervalue gym lifting. Extract principles, adapt to his hybrid program.",
+        "Randy needs to gain weight to 160 lb — any body weight reduction recommendations are not applicable.",
+        "High training volume recommendations should be contextualized against Randy's current 6+ hours/week — he may already be at or above base recommendations."
+      ],
+      "coach_integration_target": "Fitness section: trek preparation training blocks, Zone 2 volume tracking, strength programming for mountain performance, periodization guidance"
+    },
+
+    {
+      "priority": 4,
       "slug": "brain_energy_palmer",
       "title": "Brain Energy: A Revolutionary Breakthrough in Understanding Mental Health",
       "author": "Dr. Christopher Palmer",
@@ -58,7 +86,7 @@
     },
 
     {
-      "priority": 3,
+      "priority": 5,
       "slug": "nature_wants_fat_johnson",
       "title": "Nature Wants Us to Be Fat",
       "author": "Dr. Richard Johnson (nephrologist)",
@@ -81,7 +109,7 @@
     },
 
     {
-      "priority": 4,
+      "priority": 6,
       "slug": "built_to_move_starrett",
       "title": "Built to Move: The Ten Essential Habits to Help You Move Freely and Live Fully",
       "author": "Dr. Kelly Starrett and Juliet Starrett",

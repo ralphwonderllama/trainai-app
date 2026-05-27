@@ -266,7 +266,7 @@ function getTargets(dayType) {
 
 // ─── DYNAMIC USER PROMPT ─────────────────────────────────────────────────────
 // This changes every request — today's date, actual data, computed targets.
-function buildUserPrompt({ oura, nutrition, activities, gymDetected, weight, dayType, targets, supplements }) {
+function buildUserPrompt({ oura, nutrition, activities, gymDetected, weight, dayType, targets, supplements, goals }) {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const calGap = nutrition ? Math.round(targets.calories_kcal[0] - nutrition.calories) : null;
 
@@ -313,6 +313,17 @@ Eszopiclone last night: ${supplements.eszopiclone_dose_mg != null ? `${supplemen
 LDN: ${supplements.ldn_taken === true ? `TAKEN — ${supplements.ldn_dose_mg ?? '?'}mg at ${supplements.ldn_time ?? 'unknown time'}` : supplements.ldn_taken === false ? 'NOT TAKEN' : 'Not logged'}${supplements.ldn_sleep_disruption ? ' — SLEEP DISRUPTION REPORTED' : ''}
 ` : 'Not logged today — note any missed anti-inflammatory supplements in coaching'}
 
+## Active Goals & Adventures
+${goals && goals.length ? goals.map(g => {
+  const daysOut = g.target_date
+    ? Math.ceil((new Date(g.target_date + 'T12:00:00') - new Date()) / 86400000)
+    : null;
+  const countdown = daysOut != null
+    ? (daysOut > 0 ? ` — ${daysOut} days away` : daysOut === 0 ? ' — TODAY' : ' — PAST DUE')
+    : ' — date TBD';
+  return `- [${g.type.toUpperCase()}] ${g.title}${countdown}${g.notes ? ` (${g.notes})` : ''}`;
+}).join('\n') : 'No active goals set — suggest Randy add his 50-mile mountain hiking trek'}
+
 Generate your three-section coaching response now.`;
 }
 
@@ -324,12 +335,13 @@ export default async function handler(req, res) {
     const redis = await getRedis();
     const today = new Date().toISOString().split('T')[0];
 
-    const [nutritionRaw, workoutRaw, stravaRaw, weightRaw, supplementRaw] = await Promise.all([
+    const [nutritionRaw, workoutRaw, stravaRaw, weightRaw, supplementRaw, goalsRaw] = await Promise.all([
       redis.get(`trainai:nutrition:${today}`),
       redis.get(`trainai:workout:${today}`),
       redis.get(`trainai:strava:${today}`),
       redis.get('trainai:weight:latest'),
       redis.get(`trainai:supplements:${today}`),
+      redis.get('trainai:goals'),
     ]);
 
     const nutrition = nutritionRaw ? JSON.parse(nutritionRaw) : null;
@@ -337,6 +349,14 @@ export default async function handler(req, res) {
     const activities = stravaRaw ? JSON.parse(stravaRaw) : [];
     const weight = weightRaw ? JSON.parse(weightRaw).weight_lb : null;
     const supplements = supplementRaw ? JSON.parse(supplementRaw) : null;
+    const allGoals = goalsRaw ? JSON.parse(goalsRaw) : [];
+    const activeGoals = allGoals.filter(g => g.status === 'active')
+      .sort((a, b) => {
+        if (!a.target_date && !b.target_date) return 0;
+        if (!a.target_date) return 1;
+        if (!b.target_date) return -1;
+        return a.target_date.localeCompare(b.target_date);
+      });
 
     // Fetch Oura data fresh (fast, parallel with the above in practice)
     let oura = null;
@@ -348,7 +368,7 @@ export default async function handler(req, res) {
 
     const dayType = classifyDayType(activities, gymDetected);
     const targets = getTargets(dayType);
-    const userPrompt = buildUserPrompt({ oura, nutrition, activities, gymDetected, weight, dayType, targets, supplements });
+    const userPrompt = buildUserPrompt({ oura, nutrition, activities, gymDetected, weight, dayType, targets, supplements, goals: activeGoals });
 
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',

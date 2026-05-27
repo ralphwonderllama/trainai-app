@@ -417,6 +417,38 @@
     .supp-status.taken  { color: var(--green); }
     .supp-status.missed { color: var(--red); }
 
+    /* ── GOALS ──────────────────────────────────────────── */
+    .goal-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: .625rem 0;
+      border-bottom: 1px solid #0d0d0d;
+    }
+    .goal-row:last-child { border-bottom: none; }
+    .goal-emoji { font-size: 18px; flex-shrink: 0; line-height: 1.2; padding-top: 1px; }
+    .goal-body  { flex: 1; }
+    .goal-title { font-size: 13px; font-weight: 700; color: #fff; }
+    .goal-meta  { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; align-items: center; }
+    .goal-notes { font-size: 10px; color: #444; margin-top: 3px; }
+    .goal-actions { display: flex; gap: 5px; flex-shrink: 0; }
+    .goal-act-btn {
+      background: none;
+      border: 1px solid #1a1a1a;
+      border-radius: 2px;
+      color: #444;
+      font-size: 9px;
+      font-family: "Nunito Sans", sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 3px 6px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .goal-act-btn:active { opacity: .5; }
+    .goal-act-btn.done { color: var(--green); border-color: rgba(0,209,102,.25); }
+
     /* ── GROCERY LIST ───────────────────────────────────── */
     .groc-section { margin-bottom: 1.125rem; }
     .groc-section-hdr {
@@ -654,7 +686,52 @@
     <div class="screen" id="sLog">
       <div class="s-head">
         <div class="s-title">LOG</div>
-        <div class="s-sub">WEIGHT · GYM · CSV</div>
+        <div class="s-sub">GOALS · WEIGHT · GYM · CSV</div>
+      </div>
+
+      <!-- Goals & Adventures -->
+      <div class="card card-accent-red">
+        <div class="card-title"><span class="dot dot-red"></span>GOALS &amp; ADVENTURES</div>
+
+        <div id="goalsList"></div>
+
+        <!-- Add goal form (collapsed by default) -->
+        <div id="goalFormWrap" style="display:none;margin-top:.875rem;padding-top:.875rem;border-top:1px solid #111;">
+          <div class="field">
+            <label>Goal / Adventure</label>
+            <input type="text" id="goalTitle" placeholder="50-mile mountain hiking trek">
+          </div>
+          <div class="row-2">
+            <div class="field">
+              <label>Type</label>
+              <select id="goalType" style="width:100%;background:#0d0d0d;border:1px solid #222;border-radius:2px;color:#fff;padding:9px 11px;font-family:'Nunito Sans',sans-serif;font-size:13px;outline:none;">
+                <option value="trek">🥾 Trek</option>
+                <option value="climb">🧗 Climb</option>
+                <option value="summit">⛰️ Summit</option>
+                <option value="race">🏃 Race</option>
+                <option value="triathlon">🏊 Triathlon</option>
+                <option value="cycling">🚴 Cycling event</option>
+                <option value="ski">⛷️ Ski / ski touring</option>
+                <option value="other">🎯 Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Target date (optional)</label>
+              <input type="date" id="goalDate" style="color-scheme:dark;">
+            </div>
+          </div>
+          <div class="field">
+            <label>Notes</label>
+            <input type="text" id="goalNotes" placeholder="Colorado mountains, 3 days...">
+          </div>
+          <div style="display:flex;gap:.625rem;">
+            <button class="btn btn-primary" style="flex:1;" onclick="submitGoal()">ADD GOAL</button>
+            <button class="btn" onclick="toggleGoalForm(false)">CANCEL</button>
+          </div>
+          <div id="goalAddMsg" style="font-size:11px;margin-top:8px;display:none;"></div>
+        </div>
+
+        <button class="btn btn-full" id="addGoalBtn" onclick="toggleGoalForm(true)" style="margin-top:.75rem;">+ ADD GOAL OR ADVENTURE</button>
       </div>
 
       <!-- Weight -->
@@ -1282,6 +1359,7 @@ function renderSleep(oura) {
 // LOG
 // ════════════════════════════════════════════════════════════════════════════════
 async function initLog() {
+  loadGoals();
   loadSupplements();
   // Weight
   try {
@@ -1506,6 +1584,125 @@ async function saveSuppField(fields) {
     const msg = document.getElementById('suppSaveMsg');
     if (msg) { msg.textContent = '✓ Saved'; msg.style.display = 'block'; setTimeout(()=>msg.style.display='none', 1500); }
   } catch { /* silent fail — retry on next save */ }
+}
+
+// ════════════════════════════════════════════════════════════════════════════════
+// GOALS & ADVENTURES
+// ════════════════════════════════════════════════════════════════════════════════
+
+const GOAL_EMOJI = {
+  trek:'🥾', climb:'🧗', summit:'⛰️', race:'🏃', triathlon:'🏊', cycling:'🚴', ski:'⛷️', other:'🎯'
+};
+
+let goalsCache = null;
+
+async function loadGoals() {
+  try {
+    const r = await fetch('/api/goals');
+    if (!r.ok) throw new Error();
+    goalsCache = await r.json();
+    renderGoals();
+  } catch {
+    document.getElementById('goalsList').innerHTML =
+      '<div style="font-size:12px;color:#555;padding:.5rem 0;">Could not load goals</div>';
+  }
+}
+
+function renderGoals() {
+  const container = document.getElementById('goalsList');
+  const active = goalsCache?.active ?? [];
+  const completed = goalsCache?.completed ?? [];
+
+  if (!active.length && !completed.length) {
+    container.innerHTML = '<div style="font-size:12px;color:#333;padding:.5rem 0;">No goals set yet — add your first adventure below</div>';
+    return;
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+
+  function goalCard(g, isDone) {
+    const emoji = GOAL_EMOJI[g.type] ?? '🎯';
+    let countdownHtml = '';
+    if (g.target_date && !isDone) {
+      const days = Math.ceil((new Date(g.target_date + 'T12:00:00') - new Date()) / 86400000);
+      const cls = days <= 30 ? 'b-red' : days <= 90 ? 'b-yellow' : 'b-gray';
+      const label = days > 0 ? `${days}d` : days === 0 ? 'TODAY' : `${Math.abs(days)}d ago`;
+      countdownHtml = `<span class="badge ${cls}">${label}</span>`;
+    } else if (g.target_date) {
+      countdownHtml = `<span class="badge b-gray">${g.target_date}</span>`;
+    }
+    const typeBadge = `<span class="badge b-gray">${g.type.toUpperCase()}</span>`;
+    const doneBtn = !isDone
+      ? `<button class="goal-act-btn done" onclick="markGoalDone('${g.id}')">✓ DONE</button>
+         <button class="goal-act-btn" onclick="deleteGoal('${g.id}')">✕</button>`
+      : `<button class="goal-act-btn" onclick="deleteGoal('${g.id}')">✕</button>`;
+
+    return `<div class="goal-row" id="goal-${g.id}">
+      <div class="goal-emoji">${emoji}</div>
+      <div class="goal-body">
+        <div class="goal-title" style="${isDone ? 'color:#444;text-decoration:line-through;' : ''}">${g.title}</div>
+        <div class="goal-meta">${typeBadge}${countdownHtml}</div>
+        ${g.notes ? `<div class="goal-notes">${g.notes}</div>` : ''}
+      </div>
+      <div class="goal-actions">${doneBtn}</div>
+    </div>`;
+  }
+
+  let html = active.map(g => goalCard(g, false)).join('');
+  if (completed.length) {
+    html += `<div style="font-size:9px;color:#222;text-transform:uppercase;letter-spacing:1.5px;padding:.625rem 0 .25rem;">Completed</div>`;
+    html += completed.slice(0, 3).map(g => goalCard(g, true)).join('');
+  }
+  container.innerHTML = html;
+}
+
+function toggleGoalForm(show) {
+  document.getElementById('goalFormWrap').style.display = show ? 'block' : 'none';
+  document.getElementById('addGoalBtn').style.display  = show ? 'none' : 'block';
+  if (show) document.getElementById('goalTitle').focus();
+}
+
+async function submitGoal() {
+  const title = document.getElementById('goalTitle').value.trim();
+  if (!title) { alert('Enter a goal title'); return; }
+  const body = {
+    action: 'add',
+    title,
+    type:        document.getElementById('goalType').value,
+    target_date: document.getElementById('goalDate').value || null,
+    notes:       document.getElementById('goalNotes').value.trim() || null,
+  };
+  const msg = document.getElementById('goalAddMsg');
+  try {
+    const r = await fetch('/api/goals', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    if (!r.ok) throw new Error();
+    msg.style.color = 'var(--green)'; msg.textContent = '✓ Added'; msg.style.display = 'block';
+    // Reset form
+    ['goalTitle','goalNotes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('goalDate').value = '';
+    document.getElementById('goalType').value = 'trek';
+    setTimeout(() => { msg.style.display = 'none'; toggleGoalForm(false); }, 1200);
+    await loadGoals();
+  } catch {
+    msg.style.color = 'var(--red)'; msg.textContent = 'Failed to save'; msg.style.display = 'block';
+  }
+}
+
+async function markGoalDone(id) {
+  try {
+    await fetch('/api/goals', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'update', id, status:'completed' }) });
+    await loadGoals();
+  } catch { /* silent */ }
+}
+
+async function deleteGoal(id) {
+  if (!confirm('Remove this goal?')) return;
+  try {
+    await fetch('/api/goals', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'delete', id }) });
+    await loadGoals();
+  } catch { /* silent */ }
 }
 
 // ════════════════════════════════════════════════════════════════════════════════
